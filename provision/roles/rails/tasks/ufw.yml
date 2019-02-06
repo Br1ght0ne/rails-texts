@@ -1,0 +1,7 @@
+---
+- name: Allow default Rails port
+  become: yes
+  ufw:
+    rule: allow
+    port: 3000
+    proto: tcp

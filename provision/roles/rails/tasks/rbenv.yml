@@ -1,0 +1,65 @@
+- name: Install rbenv
+  tags: ['ruby', 'rbenv']
+  block:
+    - name: Install ruby/rbenv dependencies
+      tags: apt
+      become: yes
+      apt: name={{ packages }} state=present
+      vars:
+        packages:
+          - autoconf
+          - bison
+          - build-essential
+          - libssl-dev
+          - libyaml-dev
+          - libreadline6-dev
+          - zlib1g-dev
+          - libncurses5-dev
+          - libffi-dev
+          - libgdbm5
+          - libgdbm-dev
+    - name: Check if rbenv is already installed from git
+      stat:
+        path: "{{ rbenv_path }}/.git"
+      register: rbenv_git
+    - name: Delete root made by system rbenv
+      when: not rbenv_git.stat.exists
+      file:
+        path: "{{ rbenv_path }}"
+        state: absent
+    - name: Clone rbenv
+      git:
+        repo: https://github.com/rbenv/rbenv.git
+        dest: "{{ rbenv_path }}"
+        update: yes
+    - name: Add plugins directory
+      file:
+        path: "{{ rbenv_path }}/plugins"
+        state: directory
+    - name: Clone ruby-build
+      git:
+        repo: https://github.com/rbenv/ruby-build.git
+        dest: "{{ rbenv_path }}/plugins/ruby-build"
+        update: yes
+    - name: Add rbenv to bashrc
+      lineinfile:
+        line: "{{ item }}"
+        path: ~/.bashrc
+      loop:
+        - export PATH="$HOME/.rbenv/bin:$PATH"
+        - eval "$(rbenv init -)"
+    # - name: Install ruby via rbenv
+    #   shell: "{{ rbenv_path }}/bin/rbenv install {{ ruby_version }}"
+    #   args:
+    #     executable: /bin/bash
+    - name: Check for prebuilt Ruby {{ ruby_version }}
+      local_action:
+        module: stat
+        path: ~/.rbenv/ruby-{{ ruby_version }}-{{ ansible_architecture }}.tar.gz
+        register: prebuilt_ruby
+    - name: Unarchive ruby
+      when: prebuilt_ruby.stat.exists
+      unarchive:
+        src: ~/.rbenv/ruby-{{ ruby_version }}-{{ ansible_architecture }}.tar.gz
+        dest: ~/.rbenv/{{ ruby_version }}
+      notify: rbenv rehash

@@ -1,0 +1,21 @@
+---
+- name: Setup ufw firewall
+  become: yes
+  block:
+    - name: Enable ufw
+      ufw:
+        state: enabled
+        policy: deny
+    - name: Enable ufw logging
+      ufw: logging=on
+    - name: Limit SSH
+      ufw:
+        rule: limit
+        port: ssh
+        proto: tcp
+    - name: Allow HTTP(S)
+      ufw:
+        rule: allow
+        port: "{{ item }}"
+        proto: tcp
+      loop: ['http', 'https']
