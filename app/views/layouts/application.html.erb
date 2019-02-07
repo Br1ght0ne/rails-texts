@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Texts</title>
+    <title>
+      <% if content_for?(:title) %>
+        <%= yield :title %> | Texts
+      <% else %>
+        Texts
+      <% end %>
+    </title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -10,6 +16,22 @@
   </head>
 
   <body>
-    <%= yield %>
+    <div class="container">
+      <%= render 'navbar' %>
+      <% if content_for?(:forms) %>
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-md-6 col-sm-12">
+              <h2 class="text-center mt-2 mb-2"><%= yield :title %></h2>
+              <%= render 'alerts' %>
+              <%= yield :forms %>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <%= render 'alerts' %>
+        <%= yield %>
+      <% end %>
+    </div>
   </body>
 </html>

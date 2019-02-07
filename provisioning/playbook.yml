@@ -1,0 +1,15 @@
+- hosts: all
+
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - geerlingguy.ruby
+    - geerlingguy.nodejs
+    - geerlingguy.passenger
+
+  tasks:
+    - name: bundle install
+      bundler:
+        state: present
+        chdir: "{{ app_root }}"

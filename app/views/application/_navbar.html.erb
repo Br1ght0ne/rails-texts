@@ -1,0 +1,43 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+  <%= link_to Rails.application.class.parent_name, root_path, class: 'navbar-brand'%>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <%= active_link_to 'Home', root_path, class: 'nav-link' %>
+      </li>
+      <li class="nav-item">
+        <%= active_link_to 'Upload', new_text_path, class: 'nav-link' %>
+      </li>
+    </ul>
+    <% if !%w[sessions registrations passwords confirmations].include?(controller_name) %>
+      <ul class="navbar-nav ml-auto">
+        <span class="navbar-text mr-3">
+          <% if user_signed_in? %>
+            Signed in as <%= current_user.name %>
+            <% if current_user.admin? %>
+              <span class="text-warning"> (admin)</span>
+            <% end %>
+          <% else %>
+            Not signed in
+          <% end %>
+        </span>
+        <% if user_signed_in? %>
+          <li class="nav-item">
+            <%= link_to 'Sign out', destroy_user_session_path,
+              method: :delete, class: 'btn btn-outline-danger' %>
+          </li>
+        <% else %>
+          <form class="form-inline">
+            <%= link_to 'Sign up', new_user_registration_path,
+              class: 'btn btn-primary mr-2'%>
+            <%= link_to 'Sign in', new_user_session_path,
+              class: 'btn btn-outline-success'%>
+          </form>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</nav>

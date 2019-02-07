@@ -1,8 +1,0 @@
----
-- name: Install gems for Rails
-  tags: ['rails', 'gem']
-  gem: name={{ item }} state=latest
-  loop:
-    - bundler
-    - rails
-  notify: rbenv rehash

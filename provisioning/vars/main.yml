@@ -1,0 +1,5 @@
+---
+app_root: /vagrant
+passenger_server_name: rails
+passenger_app_env: development
+passenger_app_root: "{{ app_root }}/public"
