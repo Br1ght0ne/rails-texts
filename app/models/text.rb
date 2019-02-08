@@ -20,7 +20,7 @@ class Text < ApplicationRecord
   end
 
   def allowed_to_destroy?(other_user)
-    other_user.admin? || user == other_user
+    other_user&.admin? || user == other_user
   end
 
   def renderable?
