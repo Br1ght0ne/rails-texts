@@ -5,11 +5,14 @@
         <h5 class="card-title"><%= text.title %>
           <% if text&.filetype&.present? %>
             <span class="badge border border-primary text-secondary">
-              .<%= text.filetype %>
+              <%= text.filetype %>
             </span>
           <% end %>
         </h5>
-        <h6 class="card-subtitle text-muted mb-2"><%= text.user.name %></h6>
+        <h6 class="card-subtitle mb-2">
+          <span class="text-muted">by </span>
+          <%= text.user.name %>
+        </h6>
         <p class="card-text"><%= truncate(strip_tags(text.body), length: 40) %></p>
         <div class="btn-toolbar" role="toolbar">
           <div class="btn-group mr-2 pb-1" role="group">
@@ -22,7 +25,7 @@
             <% if text.allowed_to_destroy?(current_user) %>
               <%= link_to 'Edit', edit_text_path(text),
                 class: 'btn btn-outline-dark'%>
-              <%= link_to 'Delete', texts_path(text),
+              <%= link_to 'Delete', text_path(text),
                 method: :delete, data: { confirm: 'Are you sure?' },
                 class: 'btn btn-outline-danger'%>
             <% end %>

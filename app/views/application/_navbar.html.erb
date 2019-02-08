@@ -6,10 +6,24 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <%= active_link_to 'Home', root_path, class: 'nav-link' %>
+        <%= active_link_to 'Home',
+        root_path,
+        class: 'nav-link',
+        active: :exclusive %>
       </li>
       <li class="nav-item">
-        <%= active_link_to 'Upload', new_text_path, class: 'nav-link' %>
+        <%= active_link_to 'Paste',
+        new_text_path,
+        class: 'nav-link',
+        active: %r{#{new_text_path}$}
+        %>
+      </li>
+      <li class="nav-item">
+        <%= active_link_to 'Upload',
+        new_text_path(type: 'file'),
+        class: 'nav-link',
+        active: { type: 'file' }
+        %>
       </li>
     </ul>
     <% if !%w[sessions registrations passwords confirmations].include?(controller_name) %>

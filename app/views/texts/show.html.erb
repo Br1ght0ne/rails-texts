@@ -7,14 +7,16 @@
         <h5 class="card-title"><%= @text.title %></h5>
         <h6 class="card-subtitle"><span class="text-muted">by</span> <%= @text.user.name %></h6>
       </div>
-      <div class="card-body">
-        <p class="card-text"><%= @text.body.html_safe %></p>
-      </div>
+      <% if @text.body.present? %>
+        <div class="card-body">
+          <p class="card-text"><%= @text.body.html_safe %></p>
+        </div>
+      <% end %>
       <div class="card-footer">
 
         <div class="btn-toolbar" role="toolbar">
           <div class="btn-group mr-2" role="group">
-            <%= link_to 'Back', texts_path, class: 'btn btn-outline-secondary' %>
+            <%= link_to 'Back', root_path, class: 'btn btn-outline-secondary' %>
           </div>
           <div class="btn-group mr-2" role="group">
             <%= link_to 'Download', url_for(@text.file), class: 'btn btn-outline-primary' %>
@@ -22,9 +24,9 @@
           <div class="btn-group mr-2" role="group">
             <% if @text.allowed_to_destroy?(current_user) %>
               <%= link_to 'Edit', edit_text_path(@text),
-                class: 'btn btn-outline-dark'%>
+              class: 'btn btn-outline-dark'%>
               <%= link_to 'Delete', text_path(@text),
-                method: :delete, class: 'btn btn-outline-danger'%>
+              method: :delete, class: 'btn btn-outline-danger'%>
             <% end %>
           </div>
         </div>

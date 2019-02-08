@@ -3,7 +3,7 @@
 class TextsController < ApplicationController
   before_action :set_text, only: %i[show edit update destroy]
   before_action :set_extensions, only: %i[show new edit update destroy]
-  before_action :authenticate_user!, only: %i[edit destroy]
+  before_action :authenticate_user!, only: %i[new create update edit destroy]
 
   # GET /texts
   # GET /texts.json
@@ -18,6 +18,7 @@ class TextsController < ApplicationController
   # GET /texts/new
   def new
     @text = Text.new
+    @type = params[:type]
   end
 
   # GET /texts/1/edit
@@ -32,17 +33,17 @@ class TextsController < ApplicationController
     if file
       extname = File.extname(file.original_filename)
       @text.filetype = extname unless extname.blank?
-      @text.file.attach(io: file, filename: @text.filename)
-    else
-      # TODO
+      # @text.file.attach(io: file, filename: @text.filename)
     end
+
+    @text.ensure_filetype_has_a_value
 
     if @text.renderable?
       @text.render_to_html!
-      @text.body = sanitize(@text.body,
-                            tags: @text.html_tags,
-                            attributes: @text.html_attributes)
-
+      # TODO: sanitize
+      # @text.body = sanitize(@text.body,
+      #                       tags: @text.html_tags,
+      #                       attributes: @text.html_attributes)
     end
 
     respond_to do |format|
@@ -89,6 +90,9 @@ class TextsController < ApplicationController
 
   def set_extensions
     @extensions = Text.acceptable_extensions
+                      .each_pair
+                      .map { |k, v| [k, v] }
+    @text_extensions = Text.text_extensions
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

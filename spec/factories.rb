@@ -14,8 +14,8 @@ FactoryBot.define do
   end
 
   factory :text do
-    title { Faker::Lorem.sentence(2) }
-    filetype { 'txt' }
+    title { Faker::Lorem.words(2..4).join(' ') }
+    filetype { '.txt' }
     body { Faker::Lorem.paragraph(2) }
     user
   end
