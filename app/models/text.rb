@@ -59,16 +59,14 @@ class Text < ApplicationRecord
   end
 
   def file_to_text
-    contents = file.download
-    Tempfile.open('convert') do |oldfile|
-      oldfile.write(contents)
-      new_path = File.basename(oldfile.path, '.*')
-      system(['pandoc', oldfile.path, '-t commonmark', '-o', new_path].join(' '))
-      File.open(new_path) do |newfile|
-        file.attach(io: newfile, filename: filename)
-        return newfile.read
-      end
-    end
+    path = ActiveStorage::Blob.service.path_for(file.attachment.key)
+    PandocRuby.convert(Array.wrap(path),
+                       from: filetype.delete('.').to_sym,
+                       to: :markdown)
+  end
+
+  def file_to_text!
+    self.body = file_to_text
   end
 
   def ensure_filetype_has_a_value
@@ -83,16 +81,16 @@ class Text < ApplicationRecord
     %w[href src]
   end
 
-  def file_to_text!
-    self.body = file_to_text
-  end
-
   def only_file?
     body.blank? && file.attached?
   end
 
   def only_body?
     body.present? && !file.attached?
+  end
+
+  def open_file(&block)
+    file.open(&block)
   end
 
   private

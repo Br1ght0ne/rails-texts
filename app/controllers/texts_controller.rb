@@ -17,11 +17,7 @@ class TextsController < ApplicationController
   def show
     return unless @text.body.present?
 
-    @body = if @text.markdown?
-              MarkdownService.to_html(@text.body)
-            else
-              @text.body
-            end
+    @body = MarkdownService.to_html(@text.body)
   end
 
   # GET /texts/new
