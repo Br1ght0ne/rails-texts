@@ -6,7 +6,7 @@
 - [ ] Capybara
 ** TODO UI
 - [ ] File uploading with Uppy
-** TODO Markdown [5/5]
+** TODO Markdown [5/6]
 - [X] Create ~MarkdownService~
 - [X] ~RedCarpet~
   - [X] Add to Gemfile
@@ -14,3 +14,4 @@
 - [X] Don't save HTML in DB
 - [X] Convert Markdown to HTML in [[file:app/controllers/texts_controller.rb][TextsController]]
 - [X] Sanitize resulting HTML in [[file:app/views/texts/show.html.erb][show.html.erb]]
+- [ ] Add Markdown editor to form
