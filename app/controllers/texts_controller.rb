@@ -4,6 +4,7 @@ class TextsController < ApplicationController
   before_action :set_text, only: %i[show edit update destroy]
   before_action :set_extensions, only: %i[show new edit update destroy]
   before_action :authenticate_user!, only: %i[new create update edit destroy]
+  before_action :authorize_user!, only: %i[edit update destroy]
 
   # GET /texts
   # GET /texts.json
@@ -48,7 +49,7 @@ class TextsController < ApplicationController
 
     respond_to do |format|
       if @text.save
-        format.html { redirect_to root_path, notice: 'Text was successfully created.' }
+        format.html { redirect_to text_path(@text), notice: 'Text was successfully created.' }
         format.json { render :show, status: :created, location: @text }
       else
         format.html { render :new }
@@ -93,6 +94,10 @@ class TextsController < ApplicationController
                       .each_pair
                       .map { |k, v| [k, v] }
     @text_extensions = Text.text_extensions
+  end
+
+  def authorize_user!
+    authorize @text
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

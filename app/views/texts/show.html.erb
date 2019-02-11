@@ -22,9 +22,11 @@
             <%= link_to 'Download', url_for(@text.file), class: 'btn btn-outline-primary' %>
           </div>
           <div class="btn-group mr-2" role="group">
-            <% if @text.allowed_to_destroy?(current_user) %>
+            <% if policy(@text).edit? %>
               <%= link_to 'Edit', edit_text_path(@text),
               class: 'btn btn-outline-dark'%>
+            <% end %>
+            <% if policy(@text).destroy? %>
               <%= link_to 'Delete', text_path(@text),
               method: :delete, class: 'btn btn-outline-danger'%>
             <% end %>

@@ -22,9 +22,11 @@
             <%= link_to 'Details', text, class: 'btn btn-outline-info'%>
           </div>
           <div class="btn-group mr-2 pb-1" role="group">
-            <% if text.allowed_to_destroy?(current_user) %>
+            <% if policy(text).edit? %>
               <%= link_to 'Edit', edit_text_path(text),
                 class: 'btn btn-outline-dark'%>
+            <% end %>
+            <% if policy(text).destroy? %>
               <%= link_to 'Delete', text_path(text),
                 method: :delete, data: { confirm: 'Are you sure?' },
                 class: 'btn btn-outline-danger'%>

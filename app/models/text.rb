@@ -19,10 +19,6 @@ class Text < ApplicationRecord
     errors[:base] << 'not allowed to delete'
   end
 
-  def allowed_to_destroy?(other_user)
-    other_user&.admin? || user == other_user
-  end
-
   def renderable?
     %w[txt md].include?(filetype)
   end
