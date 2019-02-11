@@ -1,4 +1,4 @@
-* Tasks [5/8]
+* Tasks [6/10]
 ** DONE Authorization
 - [X] Pundit
 ** TODO Testing
@@ -19,3 +19,6 @@
 *** DONE Add PandocRuby
 *** DONE Create PandocService
 *** DONE Integrate PandocService
+** TODO Heroku [1/1]
+*** DONE Migrate to PostgreSQL
+- State "DONE"       from              [2019-02-12 Tue 00:36]
