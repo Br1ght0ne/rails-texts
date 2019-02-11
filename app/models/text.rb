@@ -5,24 +5,10 @@ class Text < ApplicationRecord
   has_one_attached :file
 
   before_validation :ensure_filetype_has_a_value
+  before_validation :ensure_no_dot_in_filetype
   before_validation :ensure_file_attached
   after_save :update_attached_file_name
   before_destroy :ensure_admin_or_owner
-
-  validates :title, :filetype, presence: true
-  validates :title, length: {
-    maximum: 255,
-    too_long: '%{count} characters is the maximum allowed'
-  }
-  # validates :body, length: { maximum: 81_920 }
-
-  def ensure_admin_or_owner
-    errors[:base] << 'not allowed to delete'
-  end
-
-  def markdown?
-    filetype == 'md'
-  end
 
   def self.acceptable_extensions
     {
@@ -46,6 +32,24 @@ class Text < ApplicationRecord
     [[:txt, 'Text (.txt)'], [:md, 'Markdown (.md)']]
   end
 
+  validates :title, :filetype, presence: true
+  validates :title, length: {
+    maximum: 255,
+    too_long: '%{count} characters is the maximum allowed'
+  }
+  validates :filetype,
+    format: { with: /\w{1,10}/ },
+    inclusion: { in: Text.text_extensions.map(&:first).map(&:to_s) }
+  # validates :body, length: { maximum: 81_920 }
+
+  def ensure_admin_or_owner
+    errors[:base] << 'not allowed to delete'
+  end
+
+  def markdown?
+    filetype == 'md'
+  end
+
   def filename
     ActiveStorage::Filename.new("#{title.delete('.')}.#{filetype}").sanitized
   end
@@ -60,9 +64,7 @@ class Text < ApplicationRecord
 
   def file_to_text
     path = ActiveStorage::Blob.service.path_for(file.attachment.key)
-    PandocRuby.convert(Array.wrap(path),
-                       from: filetype.delete('.').to_sym,
-                       to: :markdown)
+    PandocService.convert(path, from: filetype)
   end
 
   def file_to_text!
@@ -71,6 +73,10 @@ class Text < ApplicationRecord
 
   def ensure_filetype_has_a_value
     self.filetype = 'txt' unless filetype.present?
+  end
+
+  def ensure_no_dot_in_filetype
+    self.filetype.delete!('.')
   end
 
   def html_tags

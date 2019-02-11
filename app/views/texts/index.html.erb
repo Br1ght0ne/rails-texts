@@ -13,7 +13,7 @@
           <span class="text-muted">by </span>
           <%= text.user.name %>
         </h6>
-        <p class="card-text"><%= truncate(strip_tags(text.body), length: 40) %></p>
+        <p class="card-text"><%= truncate(strip_tags(MarkdownService.to_html(text.body)), length: 40) %></p>
         <div class="btn-toolbar" role="toolbar">
           <div class="btn-group mr-2 pb-1" role="group">
             <% if text.file.attached? %>

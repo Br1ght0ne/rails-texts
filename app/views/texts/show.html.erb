@@ -4,7 +4,13 @@
   <div class="col-md-6 col-sm-12">
     <div class="card">
       <div class="card-header">
-        <h5 class="card-title"><%= @text.title %></h5>
+        <h5 class="card-title"><%= @text.title %>
+          <% if @text&.filetype&.present? %>
+            <span class="badge border border-primary text-secondary">
+              <%= @text.filetype %>
+            </span>
+          <% end %>
+        </h5>
         <h6 class="card-subtitle"><span class="text-muted">by</span> <%= @text.user.name %></h6>
       </div>
       <% if @body.present? %>
