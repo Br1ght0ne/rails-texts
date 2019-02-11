@@ -11,8 +11,5 @@
 - [X] ~RedCarpet~
   - [X] Add to Gemfile
   - [X] Integrate with ~MarkdownService~
-- [ ] ~ReverseMarkdown~
-  - [ ] Add to ~Gemfile~
-  - [ ] Integrate with ~MarkdownService~
 - [X] Don't save HTML in DB
 - [X] Convert Markdown to HTML in [[file:app/controllers/texts_controller.rb][TextsController]]
