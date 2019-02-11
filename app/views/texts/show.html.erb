@@ -7,9 +7,11 @@
         <h5 class="card-title"><%= @text.title %></h5>
         <h6 class="card-subtitle"><span class="text-muted">by</span> <%= @text.user.name %></h6>
       </div>
-      <% if @text.body.present? %>
+      <% if @body.present? %>
         <div class="card-body">
-          <p class="card-text"><%= @text.body.html_safe %></p>
+          <p class="card-text">
+            <%= @body.html_safe %>
+          </p>
         </div>
       <% end %>
       <div class="card-footer">

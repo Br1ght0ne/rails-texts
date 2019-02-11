@@ -6,6 +6,13 @@
 - [ ] Capybara
 ** TODO UI
 - [ ] File uploading with Uppy
-** TODO Markdown
-- [ ] RedCarpet
-  - [ ] Add to Gemfile
+** TODO Markdown [4/5]
+- [X] Create ~MarkdownService~
+- [X] ~RedCarpet~
+  - [X] Add to Gemfile
+  - [X] Integrate with ~MarkdownService~
+- [ ] ~ReverseMarkdown~
+  - [ ] Add to ~Gemfile~
+  - [ ] Integrate with ~MarkdownService~
+- [X] Don't save HTML in DB
+- [X] Convert Markdown to HTML in [[file:app/controllers/texts_controller.rb][TextsController]]

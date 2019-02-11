@@ -14,7 +14,15 @@ class TextsController < ApplicationController
 
   # GET /texts/1
   # GET /texts/1.json
-  def show; end
+  def show
+    return unless @text.body.present?
+
+    @body = if @text.markdown?
+              MarkdownService.to_html(@text.body)
+            else
+              @text.body
+            end
+  end
 
   # GET /texts/new
   def new
@@ -37,15 +45,7 @@ class TextsController < ApplicationController
       # @text.file.attach(io: file, filename: @text.filename)
     end
 
-    @text.ensure_filetype_has_a_value
-
-    if @text.renderable?
-      @text.render_to_html!
-      # TODO: sanitize
-      # @text.body = sanitize(@text.body,
-      #                       tags: @text.html_tags,
-      #                       attributes: @text.html_attributes)
-    end
+    # @text.ensure_filetype_has_a_value
 
     respond_to do |format|
       if @text.save
@@ -102,6 +102,6 @@ class TextsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def text_params
-    params.require(:text).permit(:title, :body, :file, :page)
+    params.require(:text).permit(:title, :body, :file, :page, :filetype)
   end
 end
