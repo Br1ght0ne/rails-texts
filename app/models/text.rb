@@ -42,7 +42,7 @@ class Text < ApplicationRecord
   end
 
   def self.text_extensions
-    [[:txt, 'Text'], [:md, 'Markdown']]
+    [[:txt, 'Text (.txt)'], [:md, 'Markdown (.md)']]
   end
 
   def filename
