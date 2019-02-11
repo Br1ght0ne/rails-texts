@@ -1,4 +1,4 @@
-* Tasks [1/4]
+* Tasks [5/8]
 ** DONE Authorization
 - [X] Pundit
 ** TODO Testing
@@ -15,3 +15,7 @@
 - [X] Convert Markdown to HTML in [[file:app/controllers/texts_controller.rb][TextsController]]
 - [X] Sanitize resulting HTML in [[file:app/views/texts/show.html.erb][show.html.erb]]
 - [ ] Add Markdown editor to form
+** DONE Pandoc [3/3]
+*** DONE Add PandocRuby
+*** DONE Create PandocService
+*** DONE Integrate PandocService
