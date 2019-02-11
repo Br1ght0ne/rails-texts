@@ -19,8 +19,8 @@ class Text < ApplicationRecord
     errors[:base] << 'not allowed to delete'
   end
 
-  def renderable?
-    %w[txt md].include?(filetype)
+  def markdown?
+    filetype == 'md'
   end
 
   def self.acceptable_extensions
@@ -49,18 +49,7 @@ class Text < ApplicationRecord
     ActiveStorage::Filename.new("#{title.delete('.')}.#{filetype}").sanitized
   end
 
-  def render_to_html!
-    self.body = HTTParty.post('https://api.github.com/markdown/raw',
-                              headers: {
-                                'Content-Type' => 'text/plain',
-                                'User-Agent' => Rails.configuration.github_username
-                              },
-                              body: body).body.html_safe
-    self.filetype = 'md'
-  end
-
   def text_to_file!
-    self.filetype = 'txt'
     Tempfile.open('upload') do |f|
       f.write(body)
       f.rewind
