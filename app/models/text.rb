@@ -6,6 +6,7 @@ class Text < ApplicationRecord
 
   before_validation :ensure_filetype_has_a_value
   before_validation :ensure_file_attached
+  after_save :update_attached_file_name
   before_destroy :ensure_admin_or_owner
 
   validates :title, :filetype, presence: true
@@ -109,5 +110,11 @@ class Text < ApplicationRecord
     else
       errors.add(:base, "there's no content")
     end
+  end
+
+  def update_attached_file_name
+    return unless file.attached?
+
+    file.blob.update!(filename: filename)
   end
 end

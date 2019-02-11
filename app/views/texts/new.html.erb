@@ -1,1 +1,5 @@
-<%= render 'form', text: @text, extensions: @extensions, title: "New #{controller_path.classify.humanize}" %>
+<%= render 'form',
+text: @text,
+extensions: @extensions,
+text_extensions: @text_extensions,
+title: "New #{controller_path.classify.humanize}" %>
