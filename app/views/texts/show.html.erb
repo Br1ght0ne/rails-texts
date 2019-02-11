@@ -10,7 +10,9 @@
       <% if @body.present? %>
         <div class="card-body">
           <p class="card-text">
-            <%= @body.html_safe %>
+            <%= sanitize @body.html_safe,
+            tags: @text.html_tags,
+            attributes: @text.html_attributes %>
           </p>
         </div>
       <% end %>
