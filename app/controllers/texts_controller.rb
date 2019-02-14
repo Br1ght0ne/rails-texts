@@ -83,9 +83,9 @@ class TextsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_text
     @text = Text.find(params[:id])
-  rescue
+  rescue StandardError
     redirect_to root_path,
-      flash: { error:  "Couldn't find text with ID #{params[:id]}." }
+                flash: { error: "Couldn't find text with ID #{params[:id]}." }
   end
 
   def set_extensions
