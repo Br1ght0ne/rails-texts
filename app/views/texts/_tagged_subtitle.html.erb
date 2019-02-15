@@ -1,0 +1,13 @@
+<h6 class="mt-1 card-subtitle">
+  <% if text&.tag_list&.empty? %>
+    <span class="text-muted">no tags</span>
+  <% else %>
+    <span class="text-muted">tagged </span>
+    <% @tags = text.tag_list.sort %>
+    <% @tags.each do |tag| %>
+      <span>
+        <%= link_to tag, tagged_texts_path(tag) %><% if tag != @tags.last %><span class="text-muted">, </span><% end %>
+      </span>
+    <% end %>
+  <% end %>
+</h6>

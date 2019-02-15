@@ -9,11 +9,12 @@
             </span>
           <% end %>
         </h5>
-        <h6 class="card-subtitle mb-2">
+        <h6 class="card-subtitle">
           <span class="text-muted">by </span>
           <%= text.user.name %>
         </h6>
-        <p class="card-text"><%= truncate(strip_tags(MarkdownService.to_html(text.body)), length: 40) %></p>
+        <%= render 'tagged_subtitle', text: text %>
+        <p class="card-text mt-2"><%= truncate(strip_tags(MarkdownService.to_html(text.body)), length: 40) %></p>
         <div class="btn-toolbar" role="toolbar">
           <div class="btn-group mr-2 pb-1" role="group">
             <% if text.file.attached? %>
