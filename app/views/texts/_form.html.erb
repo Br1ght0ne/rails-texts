@@ -7,6 +7,9 @@
 
     <div class="form-inputs">
       <%= f.input :title %>
+      <% @tags = @text&.tag_list&.join(', ') %>
+      <%= f.input :tag_list,
+      input_html: { value: @tags } %>
       <% @extnames = @extensions.map { |e| ".#{e.first}" } %>
       <% if @type == 'file' %>
         <%= f.input :file,

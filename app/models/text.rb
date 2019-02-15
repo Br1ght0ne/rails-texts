@@ -1,36 +1,22 @@
 # frozen_string_literal: true
 
 class Text < ApplicationRecord
+  ACCEPTABLE_EXTENSIONS =
+    {
+      txt: 'Text', md: 'Markdown',
+      docx: 'Microsoft Word 2010+', odt: 'LibreOffice',
+      fb2: 'FictionBook 2', epub: 'EPUB',
+      org: 'Emacs Org-mode', rst: 'ReStructured Text',
+      asciidoc: 'AsciiDoc', tex: 'LaTeX/TeX',
+      json: 'JSON'
+    }.each_pair.map { |ext, name| [ext, "#{name} (.#{ext})"] }.to_h.freeze
+  TEXT_EXTENSIONS = [[:txt, 'Text (.txt)'], [:md, 'Markdown (.md)']].freeze
+
+  acts_as_ordered_taggable
+  scope :by_creation_date, -> { order(created_at: :desc) }
+
   belongs_to :user
   has_one_attached :file
-
-  before_validation :ensure_filetype_has_a_value
-  before_validation :ensure_no_dot_in_filetype
-  before_validation :ensure_file_attached
-  after_save :update_attached_file_name
-  before_destroy :ensure_admin_or_owner
-
-  def self.acceptable_extensions
-    {
-      txt: 'Text',
-      md: 'Markdown',
-      docx: 'Microsoft Word 2010+',
-      odt: 'LibreOffice',
-      fb2: 'FictionBook 2',
-      epub: 'EPUB',
-      org: 'Emacs Org-mode',
-      rst: 'ReStructured Text',
-      asciidoc: 'AsciiDoc',
-      tex: 'LaTeX/TeX',
-      json: 'JSON'
-    }.each_pair
-      .map { |ext, name| [ext, "#{name} (.#{ext})"] }
-      .to_h
-  end
-
-  def self.text_extensions
-    [[:txt, 'Text (.txt)'], [:md, 'Markdown (.md)']]
-  end
 
   validates :title, :filetype, presence: true
   validates :title, length: {
@@ -38,9 +24,17 @@ class Text < ApplicationRecord
     too_long: '%{count} characters is the maximum allowed'
   }
   validates :filetype,
-    format: { with: /\w{1,10}/ },
-    inclusion: { in: Text.text_extensions.map(&:first).map(&:to_s) }
+            format: { with: /\w{1,10}/ },
+            inclusion: { in: TEXT_EXTENSIONS.map(&:first).map(&:to_s) }
   # validates :body, length: { maximum: 81_920 }
+
+  before_destroy :ensure_admin_or_owner
+
+  before_validation :ensure_filetype_has_a_value
+  before_validation :ensure_no_dot_in_filetype
+  before_validation :ensure_file_attached
+
+  after_save :update_attached_file_name
 
   def ensure_admin_or_owner
     errors[:base] << 'not allowed to delete'
@@ -76,7 +70,7 @@ class Text < ApplicationRecord
   end
 
   def ensure_no_dot_in_filetype
-    self.filetype.delete!('.')
+    filetype.delete!('.')
   end
 
   def html_tags

@@ -12,6 +12,12 @@
         active: :exclusive %>
       </li>
       <li class="nav-item">
+        <%= active_link_to 'Tags',
+        tags_texts_path,
+        class: 'nav-link',
+        active: %r{#{tags_texts_path}} %>
+      </li>
+      <li class="nav-item">
         <%= active_link_to 'Paste',
         new_text_path,
         class: 'nav-link',

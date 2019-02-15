@@ -9,7 +9,20 @@ class TextsController < ApplicationController
   # GET /texts
   # GET /texts.json
   def index
-    @texts = Text.order(created_at: :desc).page(params[:page])
+    @texts = Text.by_creation_date.page(params[:page])
+  end
+
+  def tags
+    @tags = Text.tag_counts.pluck(:name, :taggings_count)
+  end
+
+  def tagged
+    @tags = Text.tag_counts.pluck(:name, :taggings_count)
+    @tag = params[:tag]
+    @texts = Text.tagged_with(@tag)
+                 .by_creation_date
+                 .page(params[:page])
+    render 'tags'
   end
 
   # GET /texts/1
@@ -32,7 +45,7 @@ class TextsController < ApplicationController
   # POST /texts
   # POST /texts.json
   def create
-    @text = current_user.texts.new(text_params)
+    @text = current_user.texts.new(text_params.merge(tag_list: tag_list))
 
     file = params.dig(:text, :file)
     if file
@@ -58,7 +71,7 @@ class TextsController < ApplicationController
   # PATCH/PUT /texts/1.json
   def update
     respond_to do |format|
-      if @text.update(text_params)
+      if @text.update(text_params.merge(tag_list: tag_list))
         format.html { redirect_to @text, notice: 'Text was successfully updated.' }
         format.json { render :show, status: :ok, location: @text }
       else
@@ -89,10 +102,14 @@ class TextsController < ApplicationController
   end
 
   def set_extensions
-    @extensions = Text.acceptable_extensions
-                      .each_pair
-                      .map { |k, v| [k, v] }
-    @text_extensions = Text.text_extensions
+    @extensions = Text::ACCEPTABLE_EXTENSIONS
+                  .each_pair
+                  .map { |k, v| [k, v] }
+    @text_extensions = Text::TEXT_EXTENSIONS
+  end
+
+  def tag_list
+    @tag_list ||= text_params[:tag_list].split(/[,\s]+/).join(', ')
   end
 
   def authorize_user!
@@ -101,6 +118,7 @@ class TextsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def text_params
-    params.require(:text).permit(:title, :body, :file, :page, :filetype)
+    permitted = %i[title body file page filetype tag_list]
+    params.require(:text).permit(permitted)
   end
 end

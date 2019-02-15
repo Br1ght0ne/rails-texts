@@ -1,4 +1,4 @@
-* Tasks [6/11]
+* Tasks [15/21]
 ** DONE Authorization
 - [X] Pundit
 ** TODO Testing
@@ -23,3 +23,14 @@
 *** DONE Migrate to PostgreSQL
 - State "DONE"       from              [2019-02-12 Tue 00:36]
 *** TODO Pandoc installation
+** TODO Tags [9/9]
+*** DONE Find tagging gem
+[[https://github.com/mbleigh/acts-as-taggable-on][acts-as-taggable-on]]
+*** DONE Integrate gem
+*** DONE Add tags to texts
+*** DONE Display tags in show
+*** DONE Add tags via form
+*** DONE Add tag views
+*** DONE Link to tag views from ~texts#show~
+*** DONE Add tag list view
+*** DONE Link to tags in navbar

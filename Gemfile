@@ -38,6 +38,7 @@ group :test do
 end
 
 gem 'active_link_to', '~> 1.0'
+gem 'acts-as-taggable-on', '~> 6.0'
 gem 'bootstrap', '~> 4.2.1'
 gem 'devise', '~> 4.5'
 gem 'devise-i18n', '~> 1.7'

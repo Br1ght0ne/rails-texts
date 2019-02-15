@@ -1,0 +1,8 @@
+<ul class="list-group">
+  <% @tags.sort.each do |tag| %>
+    <a href="<%= tagged_texts_path(tag.first) %>"
+       class="list-group-item <%= 'active' if tag.first == @tag %>">
+      <%= tag.first %> (<%= tag.last %>)
+    </a>
+  <% end %>
+</ul>
